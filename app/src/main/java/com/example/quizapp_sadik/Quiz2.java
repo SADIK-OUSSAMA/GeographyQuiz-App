@@ -24,7 +24,7 @@ public class Quiz2 extends AppCompatActivity {
     TextView questionText;
     ImageView questionImage;
     String RepCorrect = "";
-    int score = 0;
+    int score ;
 
     FirebaseFirestore db;
 
@@ -55,6 +55,9 @@ public class Quiz2 extends AppCompatActivity {
 
                 String imageUrl = documentSnapshot.getString("ImageURL");
                 Glide.with(this).load(imageUrl).into(questionImage);
+                Intent intent = getIntent();
+                score = intent.getIntExtra("score", 0);
+
             } else {
                 Toast.makeText(this, "Données non trouvées pour Quiz2", Toast.LENGTH_SHORT).show();
             }
