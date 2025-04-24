@@ -6,48 +6,73 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class Quiz5 extends AppCompatActivity {
+
     RadioGroup rg;
-    RadioButton rb;
+    RadioButton rb, rb1, rb2;
     Button bNext;
-    int score;
-    String RepCorrect="Non";
+    TextView questionText;
+    ImageView questionImage;
+    String RepCorrect = "";
+    int score = 0;
+
+    FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz5);
-        rg=(RadioGroup) findViewById(R.id.rg);
-        bNext=(Button) findViewById(R.id.bNext);
-        Intent intent=getIntent();
-        score=intent.getIntExtra("score",0) ;
-        //Toast.makeText(getApplicationContext(),score+"",Toast.LENGTH_SHORT).show();
-        bNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rb=(RadioButton) findViewById(rg.getCheckedRadioButtonId());
-                if(rg.getCheckedRadioButtonId()==-1){
-                    Toast.makeText(getApplicationContext(),"Merci de choisir une réponse S.V.P !",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    //Toast.makeText(getApplicationContext(),rb.getText().toString(),Toast.LENGTH_SHORT).show();
-                    if(rb.getText().toString().equals(RepCorrect)){
-                        score+=1;
-                        //Toast.makeText(getApplicationContext(),score+"",Toast.LENGTH_SHORT).show();
-                    }
-                    Intent intent=new Intent(Quiz5.this,Quiz6.class);
-                    intent.putExtra("score",score);
-                    startActivity(intent);
-                    //overridePendingTransition(R.anim.fadein,R.anim.fadeout);
-                    overridePendingTransition(R.anim.exit,R.anim.entry);
-                    finish();
-                }
+        setContentView(R.layout.activity_quiz1);
 
+        rg = findViewById(R.id.rg);
+        bNext = findViewById(R.id.bNext);
+        questionText = findViewById(R.id.questionText); // new TextView ID
+        questionImage = findViewById(R.id.questionImage); // new ImageView ID
+        rb1 = findViewById(R.id.rb1);
+        rb2 = findViewById(R.id.rb2);
+
+        db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("geoQuiz").document("Quiz5");
+
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                questionText.setText(documentSnapshot.getString("Question"));
+                rb1.setText(documentSnapshot.getString("Answer 1"));
+                rb2.setText(documentSnapshot.getString("Answer 2"));
+                RepCorrect = documentSnapshot.getString("RepCorrect");
+
+                String imageUrl = documentSnapshot.getString("ImageURL");
+                Glide.with(this).load(imageUrl).into(questionImage);
+            } else {
+                Toast.makeText(this, "Données non trouvées pour Quiz5", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e ->
+                Toast.makeText(this, "Erreur lors du chargement", Toast.LENGTH_SHORT).show()
+        );
+
+        bNext.setOnClickListener(v -> {
+            if (rg.getCheckedRadioButtonId() == -1) {
+                Toast.makeText(getApplicationContext(), "Merci de choisir une réponse S.V.P !", Toast.LENGTH_SHORT).show();
+            } else {
+                rb = findViewById(rg.getCheckedRadioButtonId());
+                if (rb.getText().toString().equals(RepCorrect)) {
+                    score += 1;
+                }
+                Intent intent = new Intent(Quiz5.this, Quiz6.class); // or ResultActivity if it's last quiz
+                intent.putExtra("score", score); // ✅ Pass updated score
+                startActivity(intent);
+                overridePendingTransition(R.anim.exit, R.anim.entry);
+                finish();
             }
         });
-
     }
 }

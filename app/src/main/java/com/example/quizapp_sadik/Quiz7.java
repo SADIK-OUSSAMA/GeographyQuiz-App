@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class Quiz2 extends AppCompatActivity {
+public class Quiz7 extends AppCompatActivity {
 
     RadioGroup rg;
     RadioButton rb, rb1, rb2;
@@ -33,18 +33,15 @@ public class Quiz2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz1);
 
-        // Retrieve score from previous activity
-        score = getIntent().getIntExtra("score", 0); // ✅ This was missing
-
         rg = findViewById(R.id.rg);
         bNext = findViewById(R.id.bNext);
-        questionText = findViewById(R.id.questionText);
-        questionImage = findViewById(R.id.questionImage);
+        questionText = findViewById(R.id.questionText); // new TextView ID
+        questionImage = findViewById(R.id.questionImage); // new ImageView ID
         rb1 = findViewById(R.id.rb1);
         rb2 = findViewById(R.id.rb2);
 
         db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("geoQuiz").document("Quiz2");
+        DocumentReference docRef = db.collection("geoQuiz").document("Quiz7");
 
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
@@ -56,7 +53,7 @@ public class Quiz2 extends AppCompatActivity {
                 String imageUrl = documentSnapshot.getString("ImageURL");
                 Glide.with(this).load(imageUrl).into(questionImage);
             } else {
-                Toast.makeText(this, "Données non trouvées pour Quiz2", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Données non trouvées pour Quiz7", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e ->
                 Toast.makeText(this, "Erreur lors du chargement", Toast.LENGTH_SHORT).show()
@@ -70,7 +67,7 @@ public class Quiz2 extends AppCompatActivity {
                 if (rb.getText().toString().equals(RepCorrect)) {
                     score += 1;
                 }
-                Intent intent = new Intent(Quiz2.this, Quiz3.class); // or ResultActivity if it's last quiz
+                Intent intent = new Intent(Quiz7.this, Quiz8.class); // or ResultActivity if it's last quiz
                 intent.putExtra("score", score); // ✅ Pass updated score
                 startActivity(intent);
                 overridePendingTransition(R.anim.exit, R.anim.entry);

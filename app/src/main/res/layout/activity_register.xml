@@ -8,8 +8,11 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:src="@drawable/logo" />
+
 
     <EditText
         android:layout_width="match_parent"
@@ -17,6 +20,9 @@
         android:hint="login"
         android:drawableLeft="@drawable/baseline_alternate_email_24"
         android:id="@+id/etMail" />
+
+
+
 
     <EditText
         android:layout_width="match_parent"
@@ -36,5 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:id="@+id/bRegister" />
+        android:id="@+id/bRegister"
+        android:backgroundTint="#2196F3"/>
 </LinearLayout>

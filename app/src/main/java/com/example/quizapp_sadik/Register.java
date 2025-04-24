@@ -60,7 +60,7 @@ public class Register extends AppCompatActivity {
                 mAuth.createUserWithEmailAndPassword(mail, password)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "Registration Successful!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Registration Successful!  inscription réussi! التسجيل ناجح! 註冊成功  ", Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(Register.this, MainActivity.class));
                                 finish();
                             } else {
