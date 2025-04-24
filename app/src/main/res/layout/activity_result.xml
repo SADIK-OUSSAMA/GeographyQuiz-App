@@ -80,6 +80,15 @@
         android:id="@+id/btnTolocal"
         android:backgroundTint="#2196F3"/>
 
+        <Button
+            android:id="@+id/bCamera"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Camera"
+            android:backgroundTint="#2196F3"/>
+
+
 
     </LinearLayout>
 
